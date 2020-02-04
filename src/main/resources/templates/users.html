@@ -55,10 +55,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+        <tr v-for="user in users">
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.role.name }}</td>
             <td>
                 <a>Edit</a>
                 <a>Delete</a>
@@ -67,6 +67,26 @@
         </tbody>
     </table>
 </div>
+
+<!-- Vue imports -->
+<script src="webjars/vue/vue.min.js"></script>
+<script src="webjars/axios/dist/axios.min.js"></script>
+<!-- Actual Vue.js script -->
+<script>
+    var app = new Vue({
+        el: '#main',
+        data() {
+            return {
+                users: null
+            }
+        },
+        mounted(){
+            axios
+                .get("/api/v1/users")
+                .then(response => (this.users = response.data))
+        },
+    })
+</script>
 
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
