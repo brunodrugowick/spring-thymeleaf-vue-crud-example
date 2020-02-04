@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href='/webjars/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
+
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/admin-page-title :: admin-page-title ('Users Administrative Page')"></div>
+
+<br><br>
+
+<div class="container" id="main">
+    <form method="post">
+        <div class="card mb-auto">
+            <div class="card-header" style="cursor: pointer" data-toggle="collapse" data-target="#userForm" aria-expanded="false" aria-controls="userForm">
+                <div class="float-left">New/Edit User</div>
+                <div class="float-right">+</div>
+            </div>
+            <div class="card card-body collapse" id="userForm">
+                <div class="form-group row">
+                    <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
+                    <input id="firstName" class="form-control col-sm-8" placeholder="First Name" type="text"/>
+                </div>
+                <div class="form-group row">
+                    <label for="lastName" class="col col-sm-4">Last Name</label>
+                    <input id="lastName" class="form-control col-sm-8" placeholder="Last Name" type="text"/>
+                </div>
+                <div class="form-group row">
+                    <label for="roleName" class="col col-sm-4">Role Name</label>
+                    <select id="roleName" class="form-control col-sm-8" placeholder="Role Name">
+                        <option>&lt;NONE&gt;</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <div class="col col-sm-4"></div>
+                    <input class="btn btn-primary col col-sm-8" type="submit" value="Save">
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <br><br>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a>Edit</a>
+                <a>Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
