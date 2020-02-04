@@ -45,9 +45,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr v-for="role in roles">
+            <td>{{ role.id }}</td>
+            <td>{{ role.name }}</td>
             <td>
                 <a>Edit</a>
                 <a>Delete</a>
@@ -56,6 +56,26 @@
         </tbody>
     </table>
 </div>
+
+<!-- Vue imports -->
+<script src="webjars/vue/vue.min.js"></script>
+<script src="webjars/axios/dist/axios.min.js"></script>
+<!-- Actual Vue.js script -->
+<script>
+    var app = new Vue({
+        el: '#main',
+        data() {
+            return {
+                roles: null
+            }
+        },
+        mounted(){
+            axios
+                .get("/api/v1/roles")
+                .then(response => (this.roles = response.data))
+        },
+    })
+</script>
 
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
