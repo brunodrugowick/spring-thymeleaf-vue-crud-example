@@ -14,25 +14,30 @@
 <br><br>
 
 <div class="container" id="main">
-    <form method="post">
+    <form v-on:submit.prevent="postUser">
         <div class="card mb-auto">
-            <div class="card-header" style="cursor: pointer" data-toggle="collapse" data-target="#userForm" aria-expanded="false" aria-controls="userForm">
+            <div aria-controls="userForm" aria-expanded="false" class="card-header" data-target="#userForm"
+                 data-toggle="collapse" style="cursor: pointer">
                 <div class="float-left">New/Edit User</div>
                 <div class="float-right">+</div>
             </div>
             <div class="card card-body collapse" id="userForm">
                 <div class="form-group row">
                     <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
-                    <input id="firstName" class="form-control col-sm-8" placeholder="First Name" type="text"/>
+                    <input id="userId" type="hidden" v-model="user_id">
+                    <input class="form-control col-sm-8" id="firstName" placeholder="First Name" type="text"
+                           v-model="user_firstName"/>
                 </div>
                 <div class="form-group row">
                     <label for="lastName" class="col col-sm-4">Last Name</label>
-                    <input id="lastName" class="form-control col-sm-8" placeholder="Last Name" type="text"/>
+                    <input class="form-control col-sm-8" id="lastName" placeholder="Last Name" type="text"
+                           v-model="user_lastName"/>
                 </div>
                 <div class="form-group row">
                     <label for="roleName" class="col col-sm-4">Role Name</label>
-                    <select id="roleName" class="form-control col-sm-8" placeholder="Role Name">
-                        <option>&lt;NONE&gt;</option>
+                    <select class="form-control col-sm-8" id="roleName" placeholder="Role Name" v-model="user_roleId">
+                        <option disabled value="">Please select a Role</option>
+                        <option v-bind:value="role.id" v-for="role in roles">{{ role.name }}</option>
                     </select>
                 </div>
                 <div class="form-group row">
@@ -77,14 +82,39 @@
         el: '#main',
         data() {
             return {
-                users: null
+                user_id: null,
+                user_firstName: null,
+                user_lastName: null,
+                user_roleId: null,
+                users: null,
+                roles: null
             }
         },
-        mounted(){
+        mounted() {
             axios
                 .get("/api/v1/users")
-                .then(response => (this.users = response.data))
+                .then(response => (this.users = response.data));
+            axios
+                .get("/api/v1/roles")
+                .then(response => (this.roles = response.data))
         },
+        methods: {
+            postUser: function (event) {
+                if (this.user_id == '' || this.user_id == null)
+                    axios
+                        .post("/api/v1/users", {
+                            "firstName": this.user_firstName,
+                            "lastName": this.user_lastName,
+                            "roleId": this.user_roleId
+                        })
+                        .then(savedUser => {
+                            this.users.push(savedUser.data);
+                            this.user_firstName = '';
+                            this.user_lastName = '';
+                            this.user_id = '';
+                        })
+            },
+        }
     })
 </script>
 
