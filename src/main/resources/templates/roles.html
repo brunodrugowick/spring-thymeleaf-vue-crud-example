@@ -110,7 +110,8 @@
             editRole: function (role) {
                 this.role_id = role.id;
                 this.role_name = role.name;
-                document.getElementById('roleForm').setAttribute("class", document.getElementById('roleForm').getAttribute("class") + " show");
+                document.getElementById('roleForm')
+                    .setAttribute("class", document.getElementById('roleForm').getAttribute("class") + " show");
             },
             deleteRole: async function (role) {
                 await axios

@@ -37,7 +37,9 @@
                     <label for="roleName" class="col col-sm-4">Role Name</label>
                     <select class="form-control col-sm-8" id="roleName" placeholder="Role Name" v-model="user_roleId">
                         <option disabled value="">Please select a Role</option>
-                        <option v-bind:value="role.id" v-for="role in roles">{{ role.name }}</option>
+                        <option :selected="role.id === user_roleId" v-bind:value="role.id" v-for="role in roles">{{
+                            role.name }}
+                        </option>
                     </select>
                 </div>
                 <div class="form-group row">
@@ -65,8 +67,8 @@
             <td>{{ user.lastName }}</td>
             <td>{{ user.role.name }}</td>
             <td>
-                <a>Edit</a>
-                <a>Delete</a>
+                <button class="btn btn-primary" v-on:click="editUser(user)">Edit</button>
+                <button class="btn btn-danger" v-on:click="deleteUser(user)">Delete</button>
             </td>
         </tr>
         </tbody>
@@ -91,16 +93,20 @@
             }
         },
         mounted() {
-            axios
-                .get("/api/v1/users")
-                .then(response => (this.users = response.data));
-            axios
-                .get("/api/v1/roles")
-                .then(response => (this.roles = response.data))
+            this.getUsers();
         },
         methods: {
+            getUsers: function () {
+                axios
+                    .get("/api/v1/users")
+                    .then(response => (this.users = response.data));
+                axios
+                    .get("/api/v1/roles")
+                    .then(response => (this.roles = response.data))
+            },
             postUser: function (event) {
-                if (this.user_id == '' || this.user_id == null)
+                // Creating
+                if (this.user_id == '' || this.user_id == null) {
                     axios
                         .post("/api/v1/users", {
                             "firstName": this.user_firstName,
@@ -112,8 +118,38 @@
                             this.user_firstName = '';
                             this.user_lastName = '';
                             this.user_id = '';
+                            this.user_roleId = null;
                         })
+                } else { // Updating
+                    axios
+                        .post("/api/v1/users", {
+                            "id": this.user_id,
+                            "firstName": this.user_firstName,
+                            "lastName": this.user_lastName,
+                            "roleId": this.user_roleId
+                        })
+                        .then(savedUser => {
+                            this.getUsers();
+                            this.user_firstName = '';
+                            this.user_lastName = '';
+                            this.user_id = '';
+                            this.user_roleId = '';
+                        })
+                }
             },
+            editUser: function (user) {
+                this.user_id = user.id;
+                this.user_firstName = user.firstName;
+                this.user_lastName = user.lastName;
+                this.user_roleId = user.role.id;
+                document.getElementById('userForm')
+                    .setAttribute("class", document.getElementById('userForm').getAttribute("class") + " show");
+            },
+            deleteUser: async function (user) {
+                await axios
+                    .delete("/api/v1/users/" + user.id);
+                this.getUsers();
+            }
         }
     })
 </script>

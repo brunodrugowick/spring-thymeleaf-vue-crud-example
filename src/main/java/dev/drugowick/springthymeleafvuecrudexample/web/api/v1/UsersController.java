@@ -34,6 +34,7 @@ public class UsersController {
 
         if (role.isPresent()) {
             User user = new User();
+            if (userDto.getId() != null) user.setId(userDto.getId());
             user.setFirstName(userDto.getFirstName());
             user.setLastName(userDto.getLastName());
             user.setRole(role.get());
@@ -42,5 +43,10 @@ public class UsersController {
         }
 
         return null;
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void delete(@PathVariable Long id) {
+        userRepository.deleteById(id);
     }
 }

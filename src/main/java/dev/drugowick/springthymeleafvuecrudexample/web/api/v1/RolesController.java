@@ -27,7 +27,7 @@ public class RolesController {
     }
 
     @DeleteMapping("roles/{id}")
-    public void get(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         roleRepository.deleteById(id);
     }
 }
