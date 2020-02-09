@@ -25,4 +25,9 @@ public class RolesController {
     public Role save(@RequestBody Role role) {
         return roleRepository.save(role);
     }
+
+    @DeleteMapping("roles/{id}")
+    public void get(@PathVariable Long id) {
+        roleRepository.deleteById(id);
+    }
 }

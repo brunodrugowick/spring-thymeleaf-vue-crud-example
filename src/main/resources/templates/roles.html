@@ -16,7 +16,8 @@
 <div class="container" id="main">
     <form v-on:submit.prevent="postRole">
         <div class="card mb-auto">
-            <div class="card-header" style="cursor: pointer" data-toggle="collapse" data-target="#roleForm" aria-expanded="false" aria-controls="roleForm">
+            <div aria-controls="roleForm" aria-expanded="false" class="card-header" data-target="#roleForm"
+                 data-toggle="collapse" id="formHeader" style="cursor: pointer">
                 <div class="float-left">New/Edit Role</div>
                 <div class="float-right">+</div>
             </div>
@@ -24,7 +25,8 @@
                 <div class="form-group row">
                     <label for="roleName" class="col-sm-4 col-form-label">Role Name</label>
                     <input id="roleId" type="hidden" v-model="role_id">
-                    <input id="roleName" class="form-control col-sm-8" placeholder="Role Name" type="text" v-model="role_name"/>
+                    <input id="roleName" class="form-control col-sm-8" placeholder="Role Name" type="text"
+                           v-model="role_name"/>
                 </div>
                 <div class="form-group row">
                     <div class="col col-sm-4"></div>
@@ -49,8 +51,8 @@
             <td>{{ role.id }}</td>
             <td>{{ role.name }}</td>
             <td>
-                <a>Edit</a>
-                <a>Delete</a>
+                <button class="btn btn-primary" v-on:click="editRole(role)">Edit</button>
+                <button class="btn btn-danger" v-on:click="deleteRole(role)">Delete</button>
             </td>
         </tr>
         </tbody>
@@ -72,23 +74,49 @@
             }
         },
         mounted(){
-            axios
-                .get("/api/v1/roles")
-                .then(response => (this.roles = response.data))
+            this.getRoles();
         },
         methods: {
-            postRole: function(event) {
-                if (this.role_id == '' || this.role_id == null)
+            getRoles: function () {
                 axios
-                    .post("/api/v1/roles", {
-                        "name": this.role_name,
-                    })
-                    .then(savedRole => {
-                        this.roles.push(savedRole.data);
-                        this.role_name = '';
-                        this.role_id = '';
-                    })
+                    .get("/api/v1/roles")
+                    .then(response => (this.roles = response.data))
             },
+            postRole: function (event) {
+                // Creating
+                if (this.role_id == '' || this.role_id == null) {
+                    axios
+                        .post("/api/v1/roles", {
+                            "name": this.role_name,
+                        })
+                        .then(savedRole => {
+                            this.roles.push(savedRole.data);
+                            this.role_name = '';
+                            this.role_id = '';
+                        })
+                } else { // Updating
+                    axios
+                        .post("/api/v1/roles", {
+                            "id": this.role_id,
+                            "name": this.role_name,
+                        })
+                        .then(savedRole => {
+                            this.getRoles();
+                            this.role_name = '';
+                            this.role_id = '';
+                        })
+                }
+            },
+            editRole: function (role) {
+                this.role_id = role.id;
+                this.role_name = role.name;
+                document.getElementById('roleForm').setAttribute("class", document.getElementById('roleForm').getAttribute("class") + " show");
+            },
+            deleteRole: async function (role) {
+                await axios
+                    .delete("/api/v1/roles/" + role.id);
+                this.getRoles();
+            }
         },
     })
 </script>
