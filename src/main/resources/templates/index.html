@@ -9,6 +9,30 @@
 <body>
 
 <div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/admin-page-title :: admin-page-title ('Spring Boot + Thymeleaf + Vue.js + Axios example')"></div>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Users Admin Page</h5>
+                    <p class="card-text">Manage users and their assigned Role. Some text to align to the other card.</p>
+                    <a class="btn btn-primary" href="/users">Users Admin Page</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Roles</h5>
+                    <p class="card-text">Manage available Roles in the system. Roles are assigned to Users later.</p>
+                    <a class="btn btn-primary" href="/roles">Roles Admin Page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
